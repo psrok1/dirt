@@ -1,4 +1,9 @@
 *.pyc
 .idea
 data/
+*egg-info/
+dist/
+build/
+__pycache__
+
 

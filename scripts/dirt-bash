@@ -1,0 +1,24 @@
+#!/bin/bash
+
+DIRT_INVOCATION=$(which dirt)
+eval "$(_DIRT_COMPLETE=source $DIRT_INVOCATION)"
+
+function dirt()
+{
+    INVOKE_PIPE=$(mktemp -u)
+    mkfifo $INVOKE_PIPE
+
+    exec 3<>$INVOKE_PIPE
+    rm $INVOKE_PIPE
+
+    $DIRT_INVOCATION "$@"
+
+    read -t 0 -u 3
+    if [[ $? -eq 0 ]]
+    then
+        read -u 3 COMMAND
+        $COMMAND
+    fi
+
+    exec 3>&-
+}
