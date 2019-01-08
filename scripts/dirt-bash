@@ -17,7 +17,7 @@ function dirt()
     if [[ $? -eq 0 ]]
     then
         read -u 3 COMMAND
-        $COMMAND
+        eval $COMMAND
     fi
 
     exec 3>&-
