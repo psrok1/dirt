@@ -32,7 +32,8 @@ def set_current_incident(incident):
     :return: None
     """
     current = get_current_incident()
-    push_history(current)
+    if current:
+        push_history(current)
     curpath = get_current_incident_path()
     if os.path.islink(curpath):
         os.unlink(curpath)
