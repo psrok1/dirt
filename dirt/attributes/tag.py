@@ -11,7 +11,10 @@ from dirt import hooks
 @hooks.hookable
 def meta_add_tag_command(ctx, tag):
     current = ctx.obj["INCIDENT"]
-    current.add_tag(tag)
+    tag = current.add_tag(tag)
+    if tag is None:
+        log.error("Invalid tag name! Must start with letter and contain only letters, digits, underscores or dashes")
+        ctx.abort()
     current.store()
     log.success("Tagged as {tag}", tag="#" + tag)
 
