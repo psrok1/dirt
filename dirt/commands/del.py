@@ -23,14 +23,15 @@ def custom_attribute(ctx, name):
 @click.group("del", help="Remove attribute (indicator) from incident",
              cls=extensions.extendable_group(custom_attribute))
 @click.option("--incident_id", "-i", default="current", autocompletion=complete.get_completer(complete.incident_list))
+@click.option("--force", "-f", is_flag=True, default=False)
 @click.pass_context
 @hooks.hookable
-def del_command(ctx, incident_id):
+def del_command(ctx, incident_id, force):
     current = incident.choose_incident(incident_id)
     if current is None:
         log.error("No incident found.")
         ctx.abort()
-    if current.closed:
+    if current.closed and not force:
         log.error("Incident is closed - you must open it before adding items.")
         ctx.abort()
     ctx.obj["INCIDENT"] = current

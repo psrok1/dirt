@@ -27,15 +27,16 @@ def custom_attribute(ctx, name):
 
 @click.group("add", help="Add attribute (indicator) to incident", cls=extensions.extendable_group(custom_attribute))
 @click.option("--incident_id", "-i", default="current", autocompletion=complete.get_completer(complete.incident_list))
+@click.option("--force", "-f", is_flag=True, default=False)
 @click.pass_context
 @hooks.hookable
-def add_command(ctx, incident_id):
+def add_command(ctx, incident_id, force):
     current = incident.choose_incident(incident_id)
     if current is None:
         log.error("No incident found.")
         ctx.abort()
-    if current.closed:
-        log.error("Incident is closed - you must open it before adding items.")
+    if current.closed and not force:
+        log.error("Incident is closed - you must open it before adding items (use -f if you don't care).")
         ctx.abort()
     ctx.obj["INCIDENT"] = current
 
