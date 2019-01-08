@@ -9,7 +9,7 @@ def read_history():
     if not os.path.isfile(get_history_path()):
         return []
     with open(get_history_path()) as f:
-        return [Incident.load_by_name(incident_id.strip()) for incident_id in f.readlines()]
+        return list(filter(None, [Incident.load_by_name(incident_id.strip()) for incident_id in f.readlines()]))
 
 
 def write_history(incidents):
