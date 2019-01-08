@@ -316,7 +316,9 @@ class Incident(object):
         :param name: Full name of incident
         :return Associated Incident object
         """
-        timestamp, uuid = name.split("_")
+        if "_" not in name:
+            return None
+        timestamp, uuid = name.split("_", 1)
         timestamp = datetime.strptime(timestamp, "%Y-%m-%d")
         uuid = UUID(bytes=b32decode(uuid+"======"))
         incident = Incident(created_on=timestamp, uuid=uuid)
