@@ -19,7 +19,7 @@ def new_command(ctx, desc, created_at, owner):
         log.warning("Current incident {current} is opened.", current=current.identifier)
         if not click.confirm("Do you really want to create new incident?"):
             ctx.abort()
-    created_at = parse(created_at)
+    created_at = created_at and parse(created_at)
     current = incident.Incident(cname=desc, created_on=created_at, owner=owner)
     current.store()
     incident.set_current_incident(current)
