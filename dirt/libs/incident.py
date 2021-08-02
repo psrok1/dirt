@@ -209,7 +209,7 @@ class Incident(object):
             return
 
         with open(self.metafile) as f:
-            metadata = yaml.load(stream=f)
+            metadata = yaml.safe_load(stream=f)
         self.cname = metadata.get("cname")
         self.closed = metadata.get("closed", False)
         self.owner = metadata.get("owner", "<unknown>")
